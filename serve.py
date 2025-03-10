@@ -7,10 +7,19 @@ from langserve import add_routes
 import os
 from dotenv import load_dotenv
 load_dotenv()
-
+import argparse
+ap = argparse.ArgumentParser()
+ap.add_argument("-m", "--model", type=str, 
+                default="Gemma2:2b", help="Ollama models")
+ap.add_argument("-ip", "--host", type=str, required=True,
+            help="host ip address")
+ap.add_argument("-p", "--port", type=int, required=True,
+            help="port")
+args = vars(ap.parse_args())
 
 ## Load Gemma2:2b using Ollama
-llm = OllamaLLM(model="gemma2:2b")
+llm = OllamaLLM(model=args["model"])
+
 # 1. Create Prompt Template
 system_template = "Translate the following into {language}:"
 prompt_template = ChatPromptTemplate.from_messages([
@@ -45,13 +54,6 @@ add_routes(
 
 if __name__=="__main__":
     import uvicorn
-    import argparse
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-t", "--host", type=str, required=True,
-                    help="host address")
-    ap.add_argument("-p", "--port", type=int, required=True,
-                    help="port")
-    args = vars(ap.parse_args())
     uvicorn.run(
         app, host=args["host"],
         port=args["port"]
