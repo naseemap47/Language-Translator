@@ -2,16 +2,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_groq import ChatGroq
+from langchain_ollama import OllamaLLM
 from langserve import add_routes
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 
-groq_api_key = os.getenv("GROQ_API_KEY")
-model = ChatGroq(model="gemma2-9b-It", groq_api_key=groq_api_key)
-
+## Load Gemma2:2b using Ollama
+llm = OllamaLLM(model="gemma2:2b")
 # 1. Create Prompt Template
 system_template = "Translate the following into {language}:"
 prompt_template = ChatPromptTemplate.from_messages([
@@ -22,7 +21,7 @@ prompt_template = ChatPromptTemplate.from_messages([
 parser = StrOutputParser()
 
 # Create Chain
-chain = prompt_template | model | parser
+chain = prompt_template | llm | parser
 
 ## APP Definition
 app = FastAPI(
@@ -48,7 +47,7 @@ if __name__=="__main__":
     import uvicorn
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("-h", "--host", type=str, required=True,
+    ap.add_argument("-t", "--host", type=str, required=True,
                     help="host address")
     ap.add_argument("-p", "--port", type=int, required=True,
                     help="port")
@@ -57,3 +56,4 @@ if __name__=="__main__":
         app, host=args["host"],
         port=args["port"]
     )
+    print('[INFO] Stopping Server')
