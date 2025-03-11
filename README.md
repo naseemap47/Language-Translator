@@ -4,10 +4,10 @@ We can interact with model using NodeJs Web-Dashboard.
 
 ### Table of Content
 
-- [Setup Server (LangServe)](https://github.com/naseemap47/Language-Translator/master/README.md#setup-server-langserve)
-    - [Groq API](https://github.com/naseemap47/Language-Translator/master/README.md#1-groq-api)
-    - [Ollama (Local)](https://github.com/naseemap47/Language-Translator/master/README.md#2-ollama-local)
-- [Setup User (Web Dashboard)](https://github.com/naseemap47/Language-Translator/master/README.md#setup-user-web-dashboard)
+- [Setup Server (LangServe)](https://github.com/naseemap47/Language-Translator/tree/master?tab=readme-ov-file#setup-server-langserve)
+    - [Groq API](https://github.com/naseemap47/Language-Translator/tree/master?tab=readme-ov-file#1-groq-api)
+    - [Ollama (Local)](https://github.com/naseemap47/Language-Translator/tree/master?tab=readme-ov-file#2-ollama-local)
+- [Setup User (Web Dashboard)](https://github.com/naseemap47/Language-Translator/tree/master?tab=readme-ov-file#setup-user-web-dashboard)
 
 ## Setup Server (LangServe)
 This needs to install/setup on a Server that runs LLM models locally or use Groq API to invoke the input coming from User (Web Dashboard).
