@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import './Home.css'
-import {Select} from 'antd'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import languages from '../../images/languages.png'
 import input from '../../images/input.png'
@@ -9,17 +7,16 @@ import translated from '../../images/translated.png'
 
 export default function Home() {
 
-    const navigate = useNavigate()
-    const values = ["English","French","Spanish","Telugu","Malayalam","Hindi","Tamil","Kannada"]
     const [text,setText] = useState("")
+    const [think,setThink] = useState("")
     const [status,setStatus]= useState("")
     const [textValue,setTextValue] = useState("")
     const handleTextValueChange = (e) => {
         setTextValue(e.target.value)
     }
-    const [selectedLanguage, setSelectedLanguage] = useState(null);
-    const handleLanguageChange = (value) => {
-        setSelectedLanguage(value);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+    const handleLanguageChange = (e) => {
+        setSelectedLanguage(e.target.value);
     };
     const handleTranslate = async () => {
         if (textValue && selectedLanguage) {
@@ -44,8 +41,37 @@ export default function Home() {
                     }
                 );
                 
+                
+                if(res?.data?.output){
+                    console.log(res?.data?.output);
+                    
+                    const r = res?.data?.output?.search('</think>'); 
+                    const r1 = res?.data?.output?.search('<think>')
+
+                    console.log(r1,r);
+                    
+                    
+                    let y,y1;
+                    if (r !== -1 && r1 !== -1) {
+                        y = res?.data?.output?.slice(r + 8);      
+                        y1 = res?.data?.output?.slice(r1+8 ,r)   
+                        console.log(y1,y);
+                                        
+                        setText(y);
+                        setThink(y1)
+                    }
+                    else{
+                        setText("Translation not available")
+                        setThink("Think not available")
+                    }
+                }
+                else{
+                    setText("Translation not available")
+                    setThink("Think not available")
+                }
+                
     
-                setText(res?.data?.output || "Translation not available.");
+                
                 setStatus("✅ Translation successful!");
             } catch (err) {
                 console.error("Translation API Error:", err);
@@ -59,7 +85,8 @@ export default function Home() {
     const handleClear = () => {
         setTextValue("")
         setText("")
-        setSelectedLanguage(null)
+        setSelectedLanguage("")
+        setThink("")
         setStatus("Cleared the entered text and selected language")
     }
     
@@ -90,38 +117,7 @@ export default function Home() {
                 <div className='home_sub_started_1_inputs_div'>
                     <div className='home_sub_started_1_input'>
                         <p>Select the preferred Language</p>
-                        <Select
-                            allowClear
-                            showSearch
-                            placeholder="Please Select Language"
-                            className="antd-select-dropdown"
-                            style={{
-                                width: "500px",
-                                borderRadius: '8px',
-                                border: 'solid 1px #dcdcdc',
-                                outline: 'none',
-                                backgroundColor: '#fff',
-                                fontFamily: 'Inter',
-                                fontSize: '16px',
-                                fontWeight: 'normal',
-                                fontStretch: 'normal',
-                                fontStyle: 'normal',
-                                lineHeight: '1.38',
-                                letterSpacing: 'normal',
-                                textAlign: 'left',
-                                color: '#232b39',
-                                margin: '0px',
-                                height:'50px'
-                            }}
-                            dropdownStyle={{ zIndex: 1300 }}
-                            notFoundContent={null}
-                            options={values.map((item) => ({
-                                value: item,
-                                label: item,
-                            }))}
-                            value={selectedLanguage}
-                            onChange={handleLanguageChange}
-                        />
+                        <input type='text' placeholder='Place enter the language' value={selectedLanguage} onChange={handleLanguageChange} />
                     </div>
                     <div className='home_sub_started_1_input'>
                         <p>Enter the text</p>
@@ -135,6 +131,10 @@ export default function Home() {
                 <div className='home_started_output'>
                     <p className='home_started_output_text_1'>Translated Text:</p>
                     <p className='home_started_output_text'>{text}</p>
+                </div>
+                <div className='home_started_output'>
+                    <p className='home_started_output_text_1'>Think process:</p>
+                    <p className='home_started_output_text'>{think}</p>
                 </div>
                 <p className='home_started_response_text'>{status}</p>
             </div>
