@@ -75,6 +75,8 @@ python3 server.py
 ## Setup User (Web Dashboard)
 ### Install NodeJs & npm
 Follow NodeJs Docs: https://nodejs.org/en/download
+Install NodeJS 18v:
+For Ubuntu follow - https://joshtronic.com/2022/04/24/how-to-install-nodejs-18-on-ubuntu-2004-lts/
 #### Install the requrements
 ```bash
 git clone https://github.com/naseemap47/Language-Translator -b langchain/ui
